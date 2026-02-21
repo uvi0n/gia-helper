@@ -3,9 +3,6 @@ import { AnalysisResults, Subject, SearchMode } from "../types";
 
 const cache = new Map<string, AnalysisResults>();
 
-// ВСТАВЬТЕ ВАШ КЛЮЧ ЗДЕСЬ
-const MY_PAID_API_KEY = 'AIzaSyAwkiQGVvC4QIneN1OVaMcbgCDNjrZyswo';
-
 export const analyzeTask = async (
   subject: Subject, 
   input: { base64Images?: string[]; taskText?: string }, 
@@ -23,10 +20,8 @@ export const analyzeTask = async (
 
   if (cache.has(cacheKey)) return cache.get(cacheKey)!;
 
-  // Используем ваш жестко прописанный ключ
-  const apiKey = MY_PAID_API_KEY;
-  if (!apiKey || apiKey.includes('AIzaSyAwkiQGVvC4QIneN1OVaMcbgCDNjrZyswo')) throw new Error("API_KEY не настроен в коде.");
-  
+  const apiKey = process.env.API_KEY;
+  if (!apiKey) throw new Error("API_KEY не установлен.");
   const ai = new GoogleGenAI({ apiKey: apiKey });
   const modelName = 'gemini-3-flash-preview';
   const siteUrl = `${subject.subdomain}.sdamgia.ru`;
@@ -90,10 +85,8 @@ export const analyzeTask = async (
 };
 
 export const chatWithAI = async (message: string, history: any[], images?: string[]) => {
-  // Используем ваш жестко прописанный ключ
-  const apiKey = MY_PAID_API_KEY;
-  if (!apiKey || apiKey.includes('AIzaSyAwkiQGVvC4QIneN1OVaMcbgCDNjrZyswo')) throw new Error("API_KEY не настроен в коде.");
-  
+  const apiKey = process.env.API_KEY;
+  if (!apiKey) throw new Error("API_KEY не установлен.");
   const ai = new GoogleGenAI({ apiKey: apiKey });
   const chat = ai.chats.create({ 
     model: 'gemini-3-flash-preview', 
