@@ -25,15 +25,10 @@ export const analyzeTask = async (
   const ai = new GoogleGenAI({ apiKey: apiKey });
   const modelName = 'gemini-3-flash-preview';
   const siteUrl = `${subject.subdomain}.sdamgia.ru`;
-  const isVariant = mode === 'variant';
   
-  const systemInstruction = isVariant 
-    ? `Ты — эксперт по образованию. Твоя задача: сгенерировать ПОЛНЫЙ тренировочный вариант экзамена по предмету ${subject.name} (всего ${subject.maxTasks} заданий).`
-    : `Ты — эксперт по образованию. Твоя задача: проанализировать предоставленные материалы и найти решения на сайте ${siteUrl}.`;
+  const systemInstruction = `Ты — эксперт по образованию. Твоя задача: проанализировать предоставленные материалы и найти решения на сайте ${siteUrl}.`;
 
-  const prompt = isVariant
-    ? `Сгенерируй полный вариант экзамена по предмету ${subject.name} на основе базы заданий ${siteUrl}.`
-    : `Предмет: ${subject.name}. ${input.taskText ? `Текст: ${input.taskText}` : 'Задания на фото.'}`;
+  const prompt = `Предмет: ${subject.name}. ${input.taskText ? `Текст: ${input.taskText}` : 'Задания на фото.'}`;
 
   const parts: any[] = [{ text: prompt }];
   if (input.base64Images) {
