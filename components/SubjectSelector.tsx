@@ -76,7 +76,7 @@ const SubjectSelector: React.FC<Props> = ({ gradeLevel, onGradeChange, onSelect 
                   : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'
               }`}
             >
-              9 КЛАСС (ОГЭ)
+              1-9 КЛАСС (ОГЭ)
             </button>
             <button 
               onClick={() => onGradeChange('ege')}
@@ -86,7 +86,7 @@ const SubjectSelector: React.FC<Props> = ({ gradeLevel, onGradeChange, onSelect 
                   : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'
               }`}
             >
-              11 КЛАСС (ЕГЭ)
+              10-11 КЛАСС (ЕГЭ)
             </button>
           </div>
         </div>
@@ -151,3 +151,4 @@ const SubjectSelector: React.FC<Props> = ({ gradeLevel, onGradeChange, onSelect 
 };
 
 export default SubjectSelector;
+
