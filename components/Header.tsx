@@ -31,7 +31,7 @@ const Header: React.FC = () => {
             </svg>
           </div>
           <div>
-            <h1 className="font-bold text-slate-900 dark:text-white text-lg leading-tight">GIA HELPER</h1>
+            <h1 className="font-bold text-slate-900 dark:text-white text-lg leading-tight">GIA-HELPER</h1>
             <p className="text-slate-500 dark:text-slate-400 text-xs font-medium uppercase tracking-wider">Твой гид по знаниям</p>
           </div>
         </div>
@@ -67,3 +67,4 @@ const Header: React.FC = () => {
 
 
 export default Header;
+
