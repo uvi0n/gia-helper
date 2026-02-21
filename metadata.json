@@ -1,0 +1,7 @@
+{
+  "name": "GIA Russian Helper",
+  "description": "An AI-powered assistant for the Russian Unified State Exam (EGE). Upload a photo of a task from sdamgia.ru, and the app will extract text, find the answer, and provide detailed explanations using Gemini Search.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
