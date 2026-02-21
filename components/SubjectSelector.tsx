@@ -151,5 +151,3 @@ const SubjectSelector: React.FC<Props> = ({ gradeLevel, onGradeChange, onSelect 
 };
 
 export default SubjectSelector;
-
-
