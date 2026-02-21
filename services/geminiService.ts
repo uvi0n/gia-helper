@@ -179,4 +179,5 @@ export const chatWithAI = async (
     });
   }
 
-  const result = await chat.sendMessageStream({ message:
+
+  const result = await chat.sendMessageStream({ message: parts });
