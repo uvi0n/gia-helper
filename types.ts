@@ -27,7 +27,7 @@ export interface HistoryItem {
   results: AnalysisResults;
 }
 
-export type SearchMode = 'all' | 'specific' | 'text' | 'variant';
+export type SearchMode = 'all' | 'specific' | 'text';
 export type GradeLevel = 'oge' | 'ege';
 
 export interface ProcessingState {
