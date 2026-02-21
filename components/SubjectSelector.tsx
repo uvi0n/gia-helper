@@ -63,7 +63,7 @@ const SubjectSelector: React.FC<Props> = ({ gradeLevel, onGradeChange, onSelect 
           Следи за обновлениями в TG
         </a>
         <h2 className="text-5xl md:text-6xl font-black text-slate-900 dark:text-white tracking-tight leading-none">
-          Твой умный путь к <span className="text-indigo-600 dark:text-indigo-500">успеху</span>
+          Твой путь к <span className="text-indigo-600 dark:text-indigo-500">успеху</span>
         </h2>
         
         <div className="flex justify-center pt-2">
@@ -151,4 +151,5 @@ const SubjectSelector: React.FC<Props> = ({ gradeLevel, onGradeChange, onSelect 
 };
 
 export default SubjectSelector;
+
 
