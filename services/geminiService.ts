@@ -8,7 +8,7 @@ export const analyzeTask = async (
   taskNumber?: number
 ): Promise<AnalysisResults> => {
   
-  const apiKey = 'AIzaSyCM8wnj5au9XX-DDzov2sKK1yH0IF3QFT0'; 
+  const apiKey = 'AIzaSyBFYXh8p88ETHZaWFuh5jzKtHEcxeGRtMg'; 
   
   const ai = new GoogleGenAI({ apiKey: apiKey });
   const modelName = 'gemini-3-flash-preview';
@@ -85,7 +85,7 @@ ${input.taskText ? `Текст задания: ${input.taskText}` : 'Задан�
 
 export const chatWithAI = async (message: string, history: any[], images?: string[]) => {
   // МЕСТО ДЛЯ КЛЮЧА №2
-  const apiKey = 'AIzaSyCM8wnj5au9XX-DDzov2sKK1yH0IF3QFT0';
+  const apiKey = 'AIzaSyBFYXh8p88ETHZaWFuh5jzKtHEcxeGRtMg';
   
   const ai = new GoogleGenAI({ apiKey: apiKey });
   const chat = ai.chats.create({ 
@@ -100,6 +100,7 @@ export const chatWithAI = async (message: string, history: any[], images?: strin
   }
   return await chat.sendMessageStream({ message: parts });
 };
+
 
 
 
