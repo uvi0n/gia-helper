@@ -10,7 +10,7 @@ export const analyzeTask = async (
   
   const apiKey = 'AIzaSyCM8wnj5au9XX-DDzov2sKK1yH0IF3QFT0'; 
   
-  if (!apiKey || apiKey === 'ТВОЙ_КЛЮЧ_ЗДЕСЬ') {
+  if (!apiKey || apiKey === 'AIzaSyCM8wnj5au9XX-DDzov2sKK1yH0IF3QFT0') {
     throw new Error("API_KEY не установлен. Вставьте ваш ключ в services/geminiService.ts");
   }
 
@@ -104,5 +104,6 @@ export const chatWithAI = async (message: string, history: any[], images?: strin
   }
   return await chat.sendMessageStream({ message: parts });
 };
+
 
 
