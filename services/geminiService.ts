@@ -7,7 +7,7 @@ export const analyzeTask = async (
   mode: SearchMode,
   taskNumber?: number
 ): Promise<AnalysisResults> => {
-  const apiKey = process.env.API_KEY; 
+  const apiKey = 'AIzaSyBFYXh8p88ETHZaWFuh5jzKtHEcxeGRtMg'; 
   if (!apiKey) throw new Error("API_KEY не установлен.");
   const ai = new GoogleGenAI({ apiKey: apiKey });
   const modelName = 'gemini-3-flash-preview';
@@ -94,6 +94,7 @@ export const chatWithAI = async (message: string, history: any[], images?: strin
   }
   return await chat.sendMessageStream({ message: parts });
 };
+
 
 
 
