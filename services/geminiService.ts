@@ -1,8 +1,6 @@
 import { GoogleGenAI, Type, ThinkingLevel } from "@google/genai";
 import { AnalysisResults, Subject, SearchMode } from "../types";
 
-// Мы убрали кэш (Map), чтобы каждый поиск был свежим и не выдавал старые результаты
-
 export const analyzeTask = async (
   subject: Subject, 
   input: { base64Images?: string[]; taskText?: string }, 
@@ -10,8 +8,6 @@ export const analyzeTask = async (
   taskNumber?: number
 ): Promise<AnalysisResults> => {
   
-  // МЕСТО ДЛЯ КЛЮЧА №1
-  // Можешь заменить process.env.API_KEY на 'ТВОЙ_КЛЮЧ' в кавычках
   const apiKey = 'AIzaSyAwkiQGVvC4QIneN1OVaMcbgCDNjrZyswo'; 
   
   if (!apiKey || apiKey === 'ТВОЙ_КЛЮЧ_ЗДЕСЬ') {
@@ -108,3 +104,4 @@ export const chatWithAI = async (message: string, history: any[], images?: strin
   }
   return await chat.sendMessageStream({ message: parts });
 };
+
