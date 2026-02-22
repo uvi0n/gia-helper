@@ -117,4 +117,6 @@ const AnalysisResultView: React.FC<Props> = ({ results, onReset }) => {
   );
 };
 
+
 export default AnalysisResultView;
+
