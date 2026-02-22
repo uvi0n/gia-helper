@@ -7,7 +7,7 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [react()],
     define: {
-      'process.env.API_KEY': JSON.stringify("AIzaSyCM8wnj5au9XX-DDzov2sKK1yH0IF3QFT0")
+      'process.env.API_KEY': JSON.stringify("AIzaSyBFYXh8p88ETHZaWFuh5jzKtHEcxeGRtMg")
     },
     server: {
       headers: {
@@ -18,5 +18,6 @@ export default defineConfig(({ mode }) => {
   };
 
 });
+
 
 
