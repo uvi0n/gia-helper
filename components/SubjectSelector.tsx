@@ -3,7 +3,7 @@ import { Subject, GradeLevel } from '../types';
 
 export const GLOBAL_SUBJECT: Subject = { 
   id: 'global', 
-  name: 'Общий поиск', 
+  name: 'Все предметы', 
   subdomain: 'sdamgia', 
   icon: '🌐', 
   maxTasks: 0 
@@ -51,100 +51,109 @@ const SubjectSelector: React.FC<Props> = ({ gradeLevel, onGradeChange, onSelect 
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto space-y-12 animate-in fade-in duration-700">
-      <div className="text-center space-y-6">
+    <div className="w-full max-w-4xl mx-auto space-y-8">
+      <div className="text-center space-y-2">
         <a 
           href="https://t.me/sdamgia67" 
           target="_blank" 
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-500/10 dark:bg-indigo-400/10 border border-indigo-500/20 dark:border-indigo-400/20 rounded-full text-[10px] font-black uppercase tracking-widest text-indigo-600 dark:text-indigo-400 hover:scale-105 transition-all mb-2"
+          className="inline-flex items-center gap-2 px-3 py-1.5 bg-indigo-500/10 dark:bg-indigo-400/10 border border-indigo-500/20 dark:border-indigo-400/20 rounded-full text-[10px] font-black uppercase tracking-widest text-indigo-600 dark:text-indigo-400 hover:bg-indigo-500/20 dark:hover:bg-indigo-400/20 transition-all mb-4 group"
         >
-          <span className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></span>
-          Следи за обновлениями в TG
+          <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse"></span>
+          Наш Telegram канал
         </a>
-        <h2 className="text-5xl md:text-6xl font-black text-slate-900 dark:text-white tracking-tight leading-none">
-          Твой путь к <span className="text-indigo-600 dark:text-indigo-500">успеху</span>
-        </h2>
+        <h2 className="text-3xl md:text-4xl font-black text-slate-900 dark:text-white tracking-tight">Твой умный помощник в учёбе</h2>
         
-        <div className="flex justify-center pt-2">
-          <div className="bg-slate-100 dark:bg-slate-900/50 p-1.5 rounded-3xl flex gap-1 border border-slate-200 dark:border-slate-800 backdrop-blur-sm">
+        <div className="flex justify-center pt-4">
+          <div className="bg-slate-100 dark:bg-slate-900 p-1 rounded-2xl flex gap-1 border border-slate-200 dark:border-slate-800">
             <button 
               onClick={() => onGradeChange('oge')}
-              className={`px-8 py-3 rounded-2xl font-black text-xs uppercase tracking-wider transition-all ${
+              className={`px-6 py-2.5 rounded-xl font-black text-xs uppercase tracking-wider transition-all ${
                 gradeLevel === 'oge' 
-                  ? 'bg-white dark:bg-slate-800 text-indigo-600 shadow-xl' 
+                  ? 'bg-white dark:bg-slate-800 text-indigo-600 shadow-sm' 
                   : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'
               }`}
             >
-              1-9 КЛАСС (ОГЭ)
+              1-9 класс (ОГЭ)
             </button>
             <button 
               onClick={() => onGradeChange('ege')}
-              className={`px-8 py-3 rounded-2xl font-black text-xs uppercase tracking-wider transition-all ${
+              className={`px-6 py-2.5 rounded-xl font-black text-xs uppercase tracking-wider transition-all ${
                 gradeLevel === 'ege' 
-                  ? 'bg-white dark:bg-slate-800 text-indigo-600 shadow-xl' 
+                  ? 'bg-white dark:bg-slate-800 text-indigo-600 shadow-sm' 
                   : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'
               }`}
             >
-              10-11 КЛАСС (ЕГЭ)
+              10-11 класс (ЕГЭ)
             </button>
           </div>
         </div>
+
+        <p className="text-slate-500 dark:text-slate-400 font-medium">Выберите предмет для поиска ответов</p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <button
           onClick={() => handleSelect(GLOBAL_SUBJECT)}
-          className="group relative w-full p-8 bg-indigo-600 rounded-[2.5rem] text-white shadow-2xl hover:bg-indigo-700 transition-all flex items-center gap-6 overflow-hidden"
+          className="group relative w-full p-6 bg-indigo-600 rounded-3xl text-white shadow-xl hover:bg-indigo-700 transition-all flex items-center gap-4 overflow-hidden"
         >
-          <div className="w-16 h-16 bg-white/20 rounded-3xl flex items-center justify-center text-3xl shrink-0 group-hover:scale-110 transition-transform">
+          <div className="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center text-2xl shrink-0 group-hover:scale-110 transition-transform">
             {GLOBAL_SUBJECT.icon}
           </div>
           <div className="text-left">
-            <h3 className="text-2xl font-black leading-tight uppercase tracking-tight">Общий поиск</h3>
-            <p className="text-indigo-100 text-sm font-bold opacity-80 uppercase tracking-wide">По всей базе знаний</p>
+            <h3 className="text-lg font-bold leading-tight">Общий поиск</h3>
+            <p className="text-indigo-100 text-xs opacity-80">По всей базе</p>
           </div>
-          <div className="ml-auto w-10 h-10 bg-white/20 rounded-full flex items-center justify-center group-hover:translate-x-1 transition-transform">
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
-          </div>
+          <svg className="w-5 h-5 ml-auto group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+          </svg>
         </button>
 
         <button
           onClick={() => (window as any).onAISelect?.()}
-          className="group relative w-full p-8 bg-emerald-600 rounded-[2.5rem] text-white shadow-2xl hover:bg-emerald-700 transition-all flex items-center gap-6 overflow-hidden"
+          className="group relative w-full p-6 bg-emerald-600 rounded-3xl text-white shadow-xl hover:bg-emerald-700 transition-all flex items-center gap-4 overflow-hidden"
         >
-          <div className="w-16 h-16 bg-white/20 rounded-3xl flex items-center justify-center text-3xl shrink-0 group-hover:scale-110 transition-transform">
+          <div className="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center text-2xl shrink-0 group-hover:scale-110 transition-transform">
             🤖
           </div>
           <div className="text-left">
-            <h3 className="text-2xl font-black leading-tight uppercase tracking-tight">ИИ Ассистент</h3>
-            <p className="text-emerald-100 text-sm font-bold opacity-80 uppercase tracking-wide">Чат и разбор фото</p>
+            <h3 className="text-lg font-bold leading-tight">ИИ Ассистент</h3>
+            <p className="text-emerald-100 text-xs opacity-80">Чат и анализ фото</p>
           </div>
-          <div className="absolute top-4 right-6 bg-white/20 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">Beta</div>
+          <div className="ml-auto bg-white/20 px-2 py-0.5 rounded-full text-[8px] font-black uppercase tracking-widest">Beta</div>
         </button>
       </div>
 
       <div className="relative py-4">
         <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-slate-200 dark:border-slate-800"></div></div>
-        <div className="relative flex justify-center text-[10px] uppercase font-black tracking-[0.3em] text-slate-400">
-          <span className="bg-slate-50 dark:bg-slate-950 px-6">Предметы</span>
+        <div className="relative flex justify-center text-[10px] uppercase font-black tracking-widest text-slate-400">
+          <span className="bg-slate-50 dark:bg-slate-950 px-4">Предметы</span>
         </div>
       </div>
       
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
         {SPECIFIC_SUBJECTS.map((sub) => (
           <button
             key={sub.id}
             onClick={() => handleSelect(sub)}
-            className="group flex flex-col items-center p-8 bg-white dark:bg-slate-900/40 border border-slate-200 dark:border-slate-800 rounded-[2rem] hover:border-indigo-500 hover:shadow-2xl transition-all backdrop-blur-sm"
+            className="group flex flex-col items-center p-5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl hover:border-indigo-500 hover:shadow-lg transition-all aspect-[1.4/1]"
           >
-            <span className="text-5xl mb-4 group-hover:scale-110 transition-transform duration-300">{sub.icon}</span>
-            <span className="font-black text-slate-900 dark:text-white text-sm text-center uppercase tracking-tight mb-3">{sub.name}</span>
-            <span className="px-4 py-1.5 bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 rounded-full text-[10px] font-black uppercase tracking-widest group-hover:bg-indigo-500 group-hover:text-white transition-colors">
-              {gradeLevel === 'ege' ? sub.maxTasksEge : sub.maxTasksOge} зад.
+            <span className="text-4xl mb-3 group-hover:scale-110 transition-transform">{sub.icon}</span>
+            <span className="font-bold text-slate-900 dark:text-white text-sm text-center">{sub.name}</span>
+            <span className="text-[10px] text-slate-400 font-bold uppercase mt-2">
+              {gradeLevel === 'ege' ? sub.maxTasksEge : sub.maxTasksOge} заданий
             </span>
           </button>
         ))}
+      </div>
+
+      <div className="flex justify-center pt-8">
+        <div className="inline-flex items-center gap-2 px-4 py-2 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl text-[10px] font-black uppercase tracking-widest text-amber-700 dark:text-amber-400">
+          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          Работает только с VPN
+        </div>
       </div>
     </div>
   );
