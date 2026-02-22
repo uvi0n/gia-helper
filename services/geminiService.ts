@@ -7,17 +7,23 @@ export const analyzeTask = async (
   mode: SearchMode,
   taskNumber?: number
 ): Promise<AnalysisResults> => {
+  // Используем ключ из окружения
   const apiKey = 'AIzaSyBFYXh8p88ETHZaWFuh5jzKtHEcxeGRtMg'; 
   if (!apiKey) throw new Error("API_KEY не установлен.");
+  
   const ai = new GoogleGenAI({ apiKey: apiKey });
   const modelName = 'gemini-3-flash-preview';
   const siteUrl = `${subject.subdomain}.sdamgia.ru`;
   
   const systemInstruction = `Ты — эксперт по подготовке к экзаменам (ЕГЭ/ОГЭ). 
-Твоя задача: найти точные решения на сайте ${siteUrl}.
-Ответ должен быть кратким, объяснение — пошаговым.`;
+Твоя задача: проанализировать задание и найти правильное решение.
+Ориентируйся на логику и базу знаний сайта ${siteUrl}.
 
-  // Добавляем номер задания в промпт, чтобы поиск был точнее
+КРИТИЧЕСКИ ВАЖНО:
+1. Сначала напиши подробное пошаговое ОБЪЯСНЕНИЕ (explanation).
+2. На основе объяснения выведи финальный ОТВЕТ (answer).
+3. Ответ должен быть кратким (число, слово или последовательность цифр).`;
+
   const prompt = `Предмет: ${subject.name}. ${taskNumber ? `ЗАДАНИЕ №${taskNumber}. ` : ''}${input.taskText ? `Текст: ${input.taskText}` : 'Задания на фото.'}`;
 
   const parts: any[] = [{ text: prompt }];
@@ -33,8 +39,7 @@ export const analyzeTask = async (
       contents: [{ role: 'user', parts }],
       config: {
         systemInstruction,
-        tools: [{ googleSearch: {} }],
-        // КРИТИЧЕСКИ ВАЖНО: Снижаем уровень до LOW, чтобы не вылетала ошибка 429
+        // УБРАЛИ googleSearch для обхода ошибки 429
         thinkingConfig: { thinkingLevel: ThinkingLevel.LOW },
         responseMimeType: "application/json",
         responseSchema: {
@@ -62,16 +67,12 @@ export const analyzeTask = async (
     const text = response.text;
     if (!text) throw new Error("Ошибка анализа.");
     const result = JSON.parse(text);
-    const sources = response.candidates?.[0]?.groundingMetadata?.groundingChunks?.map((chunk: any) => ({
-      title: chunk.web?.title || 'Решение',
-      uri: chunk.web?.uri || '',
-    })).filter((s: any) => s.uri) || [];
-
-    return { tasks: result.tasks || [], sources };
+    
+    // Источники теперь будут пустыми, так как поиск отключен
+    return { tasks: result.tasks || [], sources: [] };
   } catch (error: any) {
-    // Если ошибка 429 повторяется, выводим понятное сообщение
     if (error.message?.includes('429') || error.message?.includes('quota')) {
-      throw new Error("Лимит запросов исчерпан. Подождите 1 минуту или отключите Google Search в коде для экономии.");
+      throw new Error("Лимит запросов исчерпан. Подождите 1-2 минуты. Если ошибка повторяется — проверьте баланс API ключа.");
     }
     throw new Error(error.message || "Ошибка API");
   }
@@ -94,6 +95,7 @@ export const chatWithAI = async (message: string, history: any[], images?: strin
   }
   return await chat.sendMessageStream({ message: parts });
 };
+
 
 
 
