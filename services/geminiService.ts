@@ -1,7 +1,7 @@
 import { GoogleGenAI, Type, ThinkingLevel } from "@google/genai";
 import { AnalysisResults, Subject, SearchMode } from "../types";
 
-const cache = new Map<string, AnalysisResults>();
+// Мы убрали кэш (Map), чтобы каждый поиск был свежим и не выдавал старые результаты
 
 export const analyzeTask = async (
   subject: Subject, 
@@ -9,26 +9,33 @@ export const analyzeTask = async (
   mode: SearchMode,
   taskNumber?: number
 ): Promise<AnalysisResults> => {
-  const cacheKey = JSON.stringify({
-    subjectId: subject.id,
-    taskText: input.taskText,
-    taskNumber,
-    mode,
-    imagesCount: input.base64Images?.length || 0,
-    imagesHash: input.base64Images?.map(img => img.substring(0, 100)).join('')
-  });
+  
+  // МЕСТО ДЛЯ КЛЮЧА №1
+  // Можешь заменить process.env.API_KEY на 'ТВОЙ_КЛЮЧ' в кавычках
+  const apiKey = 'AIzaSyAwkiQGVvC4QIneN1OVaMcbgCDNjrZyswo'; 
+  
+  if (!apiKey || apiKey === 'ТВОЙ_КЛЮЧ_ЗДЕСЬ') {
+    throw new Error("API_KEY не установлен. Вставьте ваш ключ в services/geminiService.ts");
+  }
 
-  if (cache.has(cacheKey)) return cache.get(cacheKey)!;
-
-  const apiKey = 'AIzaSyAwkiQGVvC4QIneN1OVaMcbgCDNjrZyswo';
-  if (!apiKey) throw new Error("API_KEY не установлен.");
   const ai = new GoogleGenAI({ apiKey: apiKey });
   const modelName = 'gemini-3-flash-preview';
   const siteUrl = `${subject.subdomain}.sdamgia.ru`;
   
-  const systemInstruction = `Ты — эксперт по образованию. Твоя задача: проанализировать предоставленные материалы и найти решения на сайте ${siteUrl}.`;
+  // Улучшенная инструкция для ИИ
+  const systemInstruction = `Ты — ведущий эксперт по подготовке к экзаменам (ЕГЭ/ОГЭ). 
+Твоя задача: найти решение задания на сайте ${siteUrl}.
 
-  const prompt = `Предмет: ${subject.name}. ${input.taskText ? `Текст: ${input.taskText}` : 'Задания на фото.'}`;
+КРИТИЧЕСКИ ВАЖНО ДЛЯ ТОЧНОСТИ:
+1. Сначала полностью реши задание сам или найди официальный разбор.
+2. Сверь полученный ответ с ходом решения. Если они расходятся — перепроверь решение.
+3. В поле "answer" пиши ТОЛЬКО краткий финальный ответ (число, слово или последовательность цифр).
+4. В поле "explanation" распиши логику решения максимально подробно.
+5. Если в ответе должна быть последовательность цифр (например, 134), убедись, что они указаны верно и без лишних знаков.`;
+
+  const prompt = `Предмет: ${subject.name}. 
+${input.taskText ? `Текст задания: ${input.taskText}` : 'Задание на прикрепленных фото.'}
+Найди решение и ответ на ${siteUrl}.`;
 
   const parts: any[] = [{ text: prompt }];
   if (input.base64Images) {
@@ -43,8 +50,8 @@ export const analyzeTask = async (
       contents: [{ role: 'user', parts }],
       config: {
         systemInstruction,
-        tools: [{ googleSearch: {} }],
-        thinkingConfig: { thinkingLevel: ThinkingLevel.HIGH },
+        tools: [{ googleSearch: {} }], // Используем поиск для актуальных данных
+        thinkingConfig: { thinkingLevel: ThinkingLevel.HIGH }, // Максимальная точность размышлений
         responseMimeType: "application/json",
         responseSchema: {
           type: Type.OBJECT,
@@ -69,34 +76,35 @@ export const analyzeTask = async (
     });
 
     const text = response.text;
-    if (!text) throw new Error("Ошибка анализа.");
+    if (!text) throw new Error("ИИ не смог проанализировать задание.");
+    
     const result = JSON.parse(text);
     const sources = response.candidates?.[0]?.groundingMetadata?.groundingChunks?.map((chunk: any) => ({
-      title: chunk.web?.title || 'Решение',
+      title: chunk.web?.title || 'Источник решения',
       uri: chunk.web?.uri || '',
     })).filter((s: any) => s.uri) || [];
 
-    const finalResult = { tasks: result.tasks || [], sources };
-    cache.set(cacheKey, finalResult);
-    return finalResult;
+    return { tasks: result.tasks || [], sources };
   } catch (error: any) {
-    throw new Error(error.message || "Ошибка API");
+    console.error("Gemini Error:", error);
+    throw new Error(error.message || "Ошибка при обращении к ИИ");
   }
 };
 
 export const chatWithAI = async (message: string, history: any[], images?: string[]) => {
+  // МЕСТО ДЛЯ КЛЮЧА №2
   const apiKey = 'AIzaSyAwkiQGVvC4QIneN1OVaMcbgCDNjrZyswo';
-  if (!apiKey) throw new Error("API_KEY не установлен.");
+  
   const ai = new GoogleGenAI({ apiKey: apiKey });
   const chat = ai.chats.create({ 
     model: 'gemini-3-flash-preview', 
     history: history.length > 0 ? history : undefined,
-    config: { systemInstruction: "Ты — помощник." } 
+    config: { systemInstruction: "Ты — умный помощник по учебе. Отвечай кратко и по делу." } 
   });
+  
   const parts: any[] = [{ text: message }];
   if (images) {
     images.forEach(img => parts.push({ inlineData: { mimeType: 'image/jpeg', data: img.split(',')[1] || img } }));
   }
   return await chat.sendMessageStream({ message: parts });
 };
-
