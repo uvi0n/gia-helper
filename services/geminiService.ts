@@ -20,7 +20,7 @@ export const analyzeTask = async (
 
   if (cache.has(cacheKey)) return cache.get(cacheKey)!;
 
-  const apiKey = process.env.API_KEY;
+  const apiKey = 'AIzaSyAwkiQGVvC4QIneN1OVaMcbgCDNjrZyswo';
   if (!apiKey) throw new Error("API_KEY не установлен.");
   const ai = new GoogleGenAI({ apiKey: apiKey });
   const modelName = 'gemini-3-flash-preview';
@@ -85,7 +85,7 @@ export const analyzeTask = async (
 };
 
 export const chatWithAI = async (message: string, history: any[], images?: string[]) => {
-  const apiKey = process.env.API_KEY;
+  const apiKey = 'AIzaSyAwkiQGVvC4QIneN1OVaMcbgCDNjrZyswo';
   if (!apiKey) throw new Error("API_KEY не установлен.");
   const ai = new GoogleGenAI({ apiKey: apiKey });
   const chat = ai.chats.create({ 
@@ -99,3 +99,4 @@ export const chatWithAI = async (message: string, history: any[], images?: strin
   }
   return await chat.sendMessageStream({ message: parts });
 };
+
