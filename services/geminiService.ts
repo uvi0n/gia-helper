@@ -7,27 +7,18 @@ export const analyzeTask = async (
   mode: SearchMode,
   taskNumber?: number
 ): Promise<AnalysisResults> => {
-  
-  const apiKey = 'AIzaSyBFYXh8p88ETHZaWFuh5jzKtHEcxeGRtMg'; 
-  
+  const apiKey = process.env.API_KEY; 
+  if (!apiKey) throw new Error("API_KEY не установлен.");
   const ai = new GoogleGenAI({ apiKey: apiKey });
   const modelName = 'gemini-3-flash-preview';
   const siteUrl = `${subject.subdomain}.sdamgia.ru`;
   
-  // Улучшенная инструкция для ИИ
-  const systemInstruction = `Ты — ведущий эксперт по подготовке к экзаменам (ЕГЭ/ОГЭ). 
-Твоя задача: найти решение задания на сайте ${siteUrl}.
+  const systemInstruction = `Ты — эксперт по подготовке к экзаменам (ЕГЭ/ОГЭ). 
+Твоя задача: найти точные решения на сайте ${siteUrl}.
+Ответ должен быть кратким, объяснение — пошаговым.`;
 
-КРИТИЧЕСКИ ВАЖНО ДЛЯ ТОЧНОСТИ:
-1. Сначала полностью реши задание сам или найди официальный разбор.
-2. Сверь полученный ответ с ходом решения. Если они расходятся — перепроверь решение.
-3. В поле "answer" пиши ТОЛЬКО краткий финальный ответ (число, слово или последовательность цифр).
-4. В поле "explanation" распиши логику решения максимально подробно.
-5. Если в ответе должна быть последовательность цифр (например, 134), убедись, что они указаны верно и без лишних знаков.`;
-
-  const prompt = `Предмет: ${subject.name}. 
-${input.taskText ? `Текст задания: ${input.taskText}` : 'Задание на прикрепленных фото.'}
-Найди решение и ответ на ${siteUrl}.`;
+  // Добавляем номер задания в промпт, чтобы поиск был точнее
+  const prompt = `Предмет: ${subject.name}. ${taskNumber ? `ЗАДАНИЕ №${taskNumber}. ` : ''}${input.taskText ? `Текст: ${input.taskText}` : 'Задания на фото.'}`;
 
   const parts: any[] = [{ text: prompt }];
   if (input.base64Images) {
@@ -42,8 +33,9 @@ ${input.taskText ? `Текст задания: ${input.taskText}` : 'Задан�
       contents: [{ role: 'user', parts }],
       config: {
         systemInstruction,
-        tools: [{ googleSearch: {} }], // Используем поиск для актуальных данных
-        thinkingConfig: { thinkingLevel: ThinkingLevel.HIGH }, // Максимальная точность размышлений
+        tools: [{ googleSearch: {} }],
+        // КРИТИЧЕСКИ ВАЖНО: Снижаем уровень до LOW, чтобы не вылетала ошибка 429
+        thinkingConfig: { thinkingLevel: ThinkingLevel.LOW },
         responseMimeType: "application/json",
         responseSchema: {
           type: Type.OBJECT,
@@ -68,18 +60,20 @@ ${input.taskText ? `Текст задания: ${input.taskText}` : 'Задан�
     });
 
     const text = response.text;
-    if (!text) throw new Error("ИИ не смог проанализировать задание.");
-    
+    if (!text) throw new Error("Ошибка анализа.");
     const result = JSON.parse(text);
     const sources = response.candidates?.[0]?.groundingMetadata?.groundingChunks?.map((chunk: any) => ({
-      title: chunk.web?.title || 'Источник решения',
+      title: chunk.web?.title || 'Решение',
       uri: chunk.web?.uri || '',
     })).filter((s: any) => s.uri) || [];
 
     return { tasks: result.tasks || [], sources };
   } catch (error: any) {
-    console.error("Gemini Error:", error);
-    throw new Error(error.message || "Ошибка при обращении к ИИ");
+    // Если ошибка 429 повторяется, выводим понятное сообщение
+    if (error.message?.includes('429') || error.message?.includes('quota')) {
+      throw new Error("Лимит запросов исчерпан. Подождите 1 минуту или отключите Google Search в коде для экономии.");
+    }
+    throw new Error(error.message || "Ошибка API");
   }
 };
 
@@ -100,6 +94,7 @@ export const chatWithAI = async (message: string, history: any[], images?: strin
   }
   return await chat.sendMessageStream({ message: parts });
 };
+
 
 
 
