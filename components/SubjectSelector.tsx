@@ -62,7 +62,7 @@ const SubjectSelector: React.FC<Props> = ({ gradeLevel, onGradeChange, onSelect 
           <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse"></span>
           Наш Telegram канал
         </a>
-        <h2 className="text-3xl md:text-4xl font-black text-slate-900 dark:text-white tracking-tight">Твой умный помощник в учёбе</h2>
+        <h2 className="text-3xl md:text-4xl font-black text-slate-900 dark:text-white tracking-tight">Умный помощник по учёбе</h2>
         
         <div className="flex justify-center pt-4">
           <div className="bg-slate-100 dark:bg-slate-900 p-1 rounded-2xl flex gap-1 border border-slate-200 dark:border-slate-800">
@@ -152,7 +152,7 @@ const SubjectSelector: React.FC<Props> = ({ gradeLevel, onGradeChange, onSelect 
           <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
-          Работает только с VPN
+          Работает только с VРN
         </div>
       </div>
     </div>
@@ -160,3 +160,4 @@ const SubjectSelector: React.FC<Props> = ({ gradeLevel, onGradeChange, onSelect 
 };
 
 export default SubjectSelector;
+
