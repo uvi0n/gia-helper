@@ -8,7 +8,7 @@ export const analyzeTask = async (
   taskNumber?: number
 ): Promise<AnalysisResults> => {
   // Используем ключ из окружения
-  const apiKey = 'AIzaSyBFYXh8p88ETHZaWFuh5jzKtHEcxeGRtMg'; 
+  const apiKey = 'AIzaSyAb5NZF4eQbX_EBDZGrWNkzzpNEZFFb3AE'; 
   if (!apiKey) throw new Error("API_KEY не установлен.");
   
   const ai = new GoogleGenAI({ apiKey: apiKey });
@@ -95,6 +95,7 @@ export const chatWithAI = async (message: string, history: any[], images?: strin
   }
   return await chat.sendMessageStream({ message: parts });
 };
+
 
 
 
